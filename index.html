@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>To‘liq test: Axborot texnologiyalari va raqamli etika</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #eef2f5;
+            margin: 0;
+            padding: 24px 16px;
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.2);
+            padding: 28px 30px;
+        }
+        h1 {
+            font-size: 1.9rem;
+            margin-top: 0;
+            margin-bottom: 0.25rem;
+            color: #0b3b4f;
+            border-left: 6px solid #1e88a8;
+            padding-left: 1rem;
+        }
+        .subhead {
+            color: #2c5368;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #cbdde6;
+            padding-bottom: 0.75rem;
+            font-weight: 500;
+        }
+        .question-card {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.2rem 1.8rem;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.05);
+            border: 1px solid #e0edf2;
+            transition: 0.1s;
+        }
+        .q-text {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+            color: #0f3b4f;
+            background: #f3f9fe;
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        .options {
+            margin: 0.8rem 0 0.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        .option {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .option label {
+            font-weight: normal;
+            color: #1f4460;
+            cursor: pointer;
+        }
+        input[type="checkbox"], input[type="radio"] {
+            accent-color: #2c7da0;
+            transform: scale(1.05);
+            margin-top: 2px;
+        }
+        .truefalse-panel {
+            background: #fafdff;
+            border-radius: 1.5rem;
+            padding: 1rem 1.2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        .tf-item {
+            background: white;
+            border-radius: 3rem;
+            padding: 0.4rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        select {
+            padding: 6px 12px;
+            border-radius: 2rem;
+            border: 1px solid #bdd9e8;
+            background: white;
+            font-family: inherit;
+        }
+        .match-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+        .match-left, .match-right {
+            background: #f6fafd;
+            padding: 1rem 1.4rem;
+            border-radius: 1.2rem;
+            flex: 1;
+            min-width: 220px;
+        }
+        .match-left select {
+            margin-left: 8px;
+            max-width: 260px;
+        }
+        .feedback {
+            margin-top: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 40px;
+            display: inline-block;
+            background: #f0f4f9;
+        }
+        .check-all-btn {
+            background: #1e6f5c;
+            border: none;
+            color: white;
+            padding: 10px 28px;
+            border-radius: 60px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 20px 0 8px;
+            transition: 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .check-all-btn:hover {
+            background: #0e5544;
+            transform: scale(0.98);
+        }
+        footer {
+            text-align: center;
+            margin-top: 2.5rem;
+            font-size: 0.8rem;
+            color: #527a8f;
+            border-top: 1px solid #cde1ec;
+            padding-top: 1rem;
+        }
+        @media (max-width: 700px) {
+            .test-container {
+                padding: 16px;
+            }
+            .question-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="test-container">
+    <h1>📚 Raqamli dunyo bo‘yicha kompleks test</h1>
+    <div class="subhead">Barcha savollar asl fayl asosida — to‘g‘ri javoblar <span style="background:#e0f0e8; padding:2px 8px; border-radius:40px;">* bilan belgilangan</span>. Javoblaringizni tekshirish tugmasi pastda.</div>
+    <div id="root"></div>
+    <button class="check-all-btn" id="globalCheck">🔍 Barcha javoblarni tekshirish</button>
+    <footer>Interaktiv test | 63 ta savol | True/False, moslashtirish, ko‘p tanlovli | Mualliflik huquqi himoyalangan material asosida.</footer>
+</div>
+
+<script>
+    // ---------- TO‘LIQ TEST MA’LUMOTLARI (1-63) ----------
+    const fullTest = [
+        { type: "mc", text: "1. Your teacher instructs you to edit a classmate's research paper. Which two tools should you use? (Choose 2)", options: ["Design mode", "Spelling checker", "Linked notes", "Comments"], correct: [1,3] },
+        { type: "tfGroup", text: "2. For each statement, select True or False.", statements: ["If you do not cite your sources, you are guilty of plagiarism.", "In written work, you must use footnotes to cite your sources.", "Plagiarism is the unauthorized and uncredited use of another person's idea or creative work.", "You must cite your sources only when you use someone else's work exactly as it was originally created."], correctAnswers: [true, false, true, false] },
+        { type: "tfGroup", text: "3. For each statement about making a basic presentation, select True or False.", statements: ["You should minimize the text content in the presentation.", "You can only create Microsoft PowerPoint presentations on Windows computers.", "You can access Apple Keynote presentations from your Windows computer via iCloud.", "You should keep the contrast low between the text and the background color of your presentation."], correctAnswers: [true, false, true, false] },
+        { type: "yesnoGroup", text: "4. For each statement regarding the basic functions of web browsers, select Yes (True) or No (False).", statements: ["Web browsers are the internet.", "Web browsers are search engines.", "Web browsers are software applications that retrieve and present information from the World Wide Web.", "Web browsers use URLs to connect to resources such as web pages, images, and videos."], correctAnswers: [false, false, true, true] },
+        { type: "mc", text: "5. Which two methods do websites use to track the preferences of their visitors' online browsing? (Choose 2)", options: ["Private/Incognito mode browsing", "VPN Tunnel", "GPS Location", "First-party cookies"], correct: [2,3] },
+        { type: "mc", text: "6. What are two negative effects of posting a derogatory meme on social media? (Choose 2)", options: ["It showcases your wit and digital artistry skills.", "You can easily address a group of people who hold specific beliefs.", "It remains traceable after the event that inspired you to post it.", "Various viewers may interpret the meme differently."], correct: [2,3] },
+        { type: "mcSingle", text: "7. What is a benefit of \"in private\" or \"incognito\" browsing?", options: ["Your web browser allows you to change your IP address.", "Your web browser permits visits to websites that are normally blocked in your country.", "Your web browser blocks advertisements.", "Your web browser hides activities from other people who use the same device."], correct: [3] },
+        { type: "tfGroup", text: "8. For each statement about the printed document, select True or False.", statements: ["You can change the document margins from the Print settings.", "Duplex printing prints the contents of the file on both sides of the paper.", "You can only change the paper size from the Page Configuration options.", "To maintain file formatting when distributing documents electronically, print the document to the PDF file format."], correctAnswers: [true, true, false, true] },
+        { type: "matching", text: "9. Move each AI term from the list on the left to its correct definition on the right.", terms: ["Robotics (Robototexnika)", "Machine Learning", "Neural Networks", "Natural Language Processing"], definitions: ["Focuses on creating physical machines capable of performing tasks autonomously or with minimal human intervention.", "Enables machines to gain knowledge from data and improve their performance over time without being explicitly programmed.", "Possesses many small parts, like tiny computers, that can figure out patterns and connections just like humans do when they learn new things.", "Enables machines to process and comprehend text or speech, helping communication between humans and computers in a more instinctive way."], correctMapping: [0,1,2,3] },
+        { type: "yesnoGroup", text: "10. You need to identify personally identifiable information (PII) that you should not expose online. For each statement, select Yes (True) if it is PII, or No (False) if not.", statements: ["Eye color", "Date of birth", "Passport number"], correctAnswers: [false, true, true] },
+        { type: "mc", text: "11. You just signed up for an account on Google. Your new account uses Single Sign-On (SSO). Which three are benefits of Single Sign-On (SSO)? (Choose three)", options: ["You have stronger security.", "You only need to remember one set of login details.", "SSO is government owned and operated.", "After signing on, you can access your email, document storage, apps, and other sites with full access.", "Credentials are stored on Amazon, Facebook, and Google.", "You can log in without using passwords."], correct: [0,1,3] },
+        { type: "tfGroup", text: "12. For each statement about the difference between wired and wireless networks, select True or False.", statements: ["An encrypted Wi-Fi connection is more secure than an Ethernet connection.", "Wi-Fi connections typically have fewer data transmission delays than Ethernet connections.", "An Ethernet connection typically provides faster network connection speeds than Wi-Fi connections."], correctAnswers: [false, false, true] },
+        { type: "mcSingle", text: "13. At the start of the school year, your science teacher sends an email message to all the students... which address option should you use to send the form to your parents?", options: ["Reply", "Follow up", "Reply All", "Forward"], correct: [3] },
+        { type: "mcSingle", text: "14. Which practice follows effective file-naming conventions?", options: ["Using the default file name", "Using generic terms like 'document' or 'file'", "Using clear names that describe the content", "Including random letters and numbers for security"], correct: [2] },
+        { type: "matching", text: "15. Match each concept about software applications to its definition.", terms: ["Application (Dastur/Ilova)", "App (Ilova)", "Web-based Application (Veb-ilova)", "Desktop Application (Kompyuter ilovasi)"], definitions: ["Designed to perform a variety of functions", "Designed for a single purpose and performs a single function", "Runs from the Cloud", "Must be installed on the computer before it can run"], correctMapping: [0,1,2,3] },
+        { type: "mcSingle", text: "16. You need to store a list of webpages so you can easily return to them later. What web browser feature or setting should you use?", options: ["Favorites or Bookmarks", "History or Timeline", "Tabbed Browsing", "Address box"], correct: [0] },
+        { type: "mcSingle", text: "17. You and a partner are collaborating to create a science report. You work at different times. What type of collaboration?", options: ["Simultaneous", "Asynchronous", "Synchronous", "Offline"], correct: [1] },
+        { type: "mc", text: "18. Which two methods should you use to reduce eye strain while using a digital display? (Choose 2)", options: ["Periodically look away from the screen and focus on a faraway object.", "Shine the primary room light source directly onto the screen.", "Tilt the screen directly toward your eyes.", "Adjust the screen resolution to set the text at a comfortable size."], correct: [0,3] },
+        { type: "yesnoGroup", text: "19. For each statement regarding proprietary vs. open source software, select Yes (True) or No (False).", statements: ["Open-source refers to software source code that is available for anybody to access and modify.", "Proprietary software refers to software that is owned by an individual or a company who developed it.", "Proprietary software is usually free.", "Open-source software is generally sold commercially.", "Proprietary software generally has technical support.", "Open-source software usually has no technical support or is only supported by community forums."], correctAnswers: [true, true, false, false, true, true] },
+        { type: "mc", text: "20. You are conducting online research. You need to refine your search to return results that are more relevant. Which two techniques should you use? (Choose 2)", options: ["Enclose multi-word search terms in quotation marks", "Search for generic terms", "Capitalize important terms", "Search for root words and exclude suffixes"], correct: [0,3] },
+        { type: "mcSingle", text: "21. What is a constructive reason for choosing not to engage with online trolling?", options: ["It encourages the troll to continue their behavior.", "It motivates others to participate in the negative conversation.", "It helps avoid escalating the situation and reduces the troll's influence.", "It gives the troll an opportunity to explain their behavior."], correct: [2] },
+        { type: "tfGroup", text: "22. You need to verify that an information source is in the public domain. For each statement, select True if it is a reason a copyrighted work may become part of the public domain.", statements: ["The copyright has expired.", "The copyright owner did not follow the copyright renewal process.", "The copyright owner has chosen to place the work in the public domain."], correctAnswers: [true, true, true] },
+        { type: "tfGroup", text: "23. For each statement about time differences between wired and wireless networking, select True or False.", statements: ["An encrypted Wi-Fi connection is more secure than an Ethernet connection.", "Wireless networks typically have slower data transmission speeds than Ethernet connections.", "An Ethernet connection typically provides faster network connection speeds than a Wi-Fi connection."], correctAnswers: [false, true, true] },
+        { type: "mc", text: "24. You take a lot of digital photos and need more storage space. Which three are types of data storage? (Choose three)", options: ["RAM", "Flash ROM", "ROM", "Solid State Drive (SSD)", "Hard Disk Drive (HDD)", "USB Flash Drive"], correct: [3,4,5] },
+        { type: "mc", text: "25. When using an app, network, or service, you may be required to agree to an Acceptable Use Policy (AUP). What are two types of information that an Acceptable Use Policy describes? (Choose 2)", options: ["The consequences of violating the policy", "Unacceptable uses of the app, network, or service", "How to copyright data that you submit", "How to monetize information"], correct: [0,1] },
+        { type: "mcSingle", text: "26. You need to download a file to use on your Windows computer. Which file extension will work directly on your computer?", options: [".pkg", ".dmg", ".deb", ".exe"], correct: [3] },
+        { type: "yesnoGroup", text: "27. As an ethical computer user, identify examples of good netizen etiquette in an office environment. Select Yes if good etiquette.", statements: ["Include your coworkers as CC in all email messages so they don't miss the information.", "Share large files from servers or cloud storage instead of attaching them in email messages.", "Apply the standards and values used in face-to-face interactions to your online interactions."], correctAnswers: [false, true, true] },
+        { type: "mcSingle", text: "28. What is spyware?", options: ["A program that is designed to look harmless but allows unauthorized access to your computer.", "A program that installs itself on your system without your knowledge and tracks your online habits.", "Content that tricks you into revealing account codes and passwords by pretending to be legitimate.", "A program that can copy itself and spread to other computers."], correct: [1] },
+        { type: "mcSingle", text: "29. Which unit describes the short-term data storage used by a computing device to run applications?", options: ["CPU", "RAM", "Mbps", "GHz"], correct: [1] },
+        { type: "mc", text: "30. Which two actions can you take to help maintain your digital privacy? (Choose 2)", options: ["Configure your web browser settings to block cookies", "Store your private documents in a cloud storage location", "Use only your school email to send private information", "Turn off GPS on your devices when you are not actively using it"], correct: [0,3] },
+        { type: "mc", text: "31. Which three devices emit information when connected to a computer without a touch screen? (Choose 3)", options: ["Monitor", "Printer", "Headphones", "Mouse", "Keyboard"], correct: [0,1,2] },
+        { type: "yesnoGroup", text: "32. For each statement regarding mobile device operating systems.", statements: ["The operating system on approximately 70% of the world's mobile devices is Android.", "There are more apps for iOS than for Android.", "Apps for iOS tend to have fewer security issues than apps for Android.", "The operating system on approximately 30% of the world's mobile devices is iOS."], correctAnswers: [true, false, true, true] },
+        { type: "mc", text: "33. There are three primary desktop computer operating systems. What are three main functions that all computer operating systems have in common? (Choose 3)", options: ["Manage resources, such as CPU, memory, disk drives, and peripherals", "Manage telephone and messaging services", "Provide services for application software", "Provide a user interface", "Provide video gaming", "Provide 100% hack-proof security"], correct: [0,2,3] },
+        { type: "mcSingle", text: "34. You are host of video conference. What must each student do to speak without interruption?", options: ["Mute the microphone until it is their turn to speak.", "Introduce the name of the participant who will speak.", "Sign in early to ensure that audio and video technology is working properly.", "Stay on camera throughout the conference."], correct: [0] },
+        { type: "tfGroup", text: "35. For each statement about smart messaging, select True or False.", statements: ["Online messaging apps simplify the process of communicating with other people.", "Communication through emojis reproduces social constructs such as stereotypes, prejudices, and limitations.", "Emojis are a constantly changing concept that may not universally reflect sources of study."], correctAnswers: [true, true, true] },
+        { type: "yesnoGroup", text: "36. You are researching information in a long document. For each statement, select Yes if you can use the Find feature to complete the task.", statements: ["Locate a keyword or phrase within the document.", "Change the format of all citations in your document.", "Identify pages that include references by a specific author."], correctAnswers: [true, false, false] },
+        { type: "mcSingle", text: "37. You have written an original recipe. Which rule most affects where you can share your recipe?", options: ["Some social media sites have a limit on the number of characters or pictures you can post.", "Some social media sites do not allow you to format information as a bulleted list.", "Some social media sites do not allow you to post recipes.", "Some social media sites have a limit on the length of videos you can post."], correct: [0] },
+        { type: "tfGroup", text: "38. For each statement about the practice of citation, select True or False.", statements: ["If you quote directly from a speech, you must cite the source.", "If you summarize someone else's work, you must cite the source.", "If you paraphrase someone else's work, you must cite the source.", "You should place quotation marks around phrases of three or more words that you quote from someone else's work."], correctAnswers: [true, true, true, true] },
+        { type: "matching", text: "39. Move each data storage device to the correct definition.", terms: ["A compact, lightweight external data storage device that uses flash memory", "An external data storage device powered through the USB port", "An internal data storage device that stores and retrieves data using flash memory", "An internal electromechanical data storage device that stores and retrieves data using a rapidly rotating platter"], definitions: ["USB flash drive", "Portable hard drive", "SSD", "HDD"], correctMapping: [0,1,2,3] },
+        { type: "mcSingle", text: "40. You enter a recipe into a Microsoft Word document as a single paragraph and convert it to a numbered list. Which key (or key combination) should you press at the end of each sentence to separate paragraph into individual numbered list items?", options: ["Shift+Tab", "Tab", "Shift+Enter", "Enter"], correct: [3] },
+        { type: "matching", text: "41. Move each email address field to its correct purpose.", terms: ["To copy other people and NOT let them see the email addresses", "To copy other people and let each see the email addresses", "To send the message you received from one person to a different person", "To respond to a message sender and exclude other recipients", "To respond to a message sender and all other recipients"], definitions: ["BCC", "CC", "Forward", "Reply", "Reply All"], correctMapping: [0,1,2,3,4] },
+        { type: "matching", text: "42. Identify the purpose of common web browser tools. Match each tool with its function.", terms: ["Address box", "Refresh button", "Back button", "History"], definitions: ["Displays the URL of the current web page", "Reloads the current webpage", "Returns the previously visited web page", "Lists the web pages you visited recently"], correctMapping: [0,1,2,3] },
+        { type: "mcSingle", text: "43. You post a ridiculous and embarrassing photo of your friend on social media. How long has the information been on the internet?", options: ["7 years", "24 hours", "Until your friend deletes it", "Forever even after you delete it"], correct: [3] },
+        { type: "mc", text: "44. Which two options are benefits of digital collaboration? (Choose 2)", options: ["Collaborators can more easily avoid distractions while working", "Ideas and feedback can be shared quickly", "Collaborators can work with others from any geographical location", "Confidential data is safer from theft and intrusion"], correct: [1,2] },
+        { type: "mc", text: "45. You need to maintain the security of your smartphone. Which three guidelines should you follow? (Choose 3)", options: ["Disable Wi-Fi and Bluetooth when you're not using them", "Do not leave your device unattended in public or in easily accessible areas", "Use a USB 3.0 or newer connection cable when connected to a new computer", "Always use a surge protector when charging the device", "Update your smartphone operating system only if you need a new feature", "Avoid using public Wi-Fi networks"], correct: [0,1,5] },
+        { type: "mc", text: "46. Your teacher has cautioned you about protecting your online identity. Which three activities help define your digital identity? (Choose 3)", options: ["Comments you post or tweet", "Having multiple email accounts", "Media posted by other people that you share with your friends", "Your profile", "Using Twitter and Snapchat instead of Facebook", "Only posting from a phone, never from a computer"], correct: [0,2,3] },
+        { type: "tfGroup", text: "47. Identify the functions that are managed by a computer operator (OS) or not (App).", statements: ["Edits text files", "Searches the internet", "Allocates hardware resources", "Communicates with peripheral devices"], correctAnswers: [false, false, true, true] },
+        { type: "mc", text: "48. Which two methods should you use to avoid computer-related injuries? (Choose 2)", options: ["Using high-end graphics cards to reduce eye fatigue", "Adjust the chair so your feet can rest flat on the floor", "Using a keyboard cover and silicone so you can type keys more smoothly", "Using an ergonomic keyboard so that the wrist position is more natural"], correct: [1,3] },
+        { type: "matching", text: "49. Match the peripherals category to each device.", terms: ["Keyboard", "Microphone", "Printer", "Scanner", "Webcam"], definitions: ["Input", "Input", "Output", "Input", "Input"], correctMapping: [0,1,2,3,4] },
+        { type: "tfGroup", text: "50. For each statement about the benefits of a good network infrastructure, select True or False.", statements: ["Ensures that students can consistently connect to the campus network.", "Enables students to connect to the school's computer lab from any location.", "Supports the scaling of the school network without redesign as the student population increases."], correctAnswers: [true, false, true] },
+        { type: "tfGroup", text: "51. For each statement about the Android operating system, select True or False.", statements: ["Android is open-source software.", "Android is a desktop operating system.", "Android requires the Google App Store."], correctAnswers: [true, false, false] },
+        { type: "mc", text: "52. When citing information published on the web, you should include a retrieval statement. Which three items should you include? (Choose 3)", options: ["Topic you were searching", "Name of the author or organization", "Name of the website", "Date you accessed the website", "Date the page was posted", "URL or web address of the site"], correct: [2,3,5] },
+        { type: "yesnoGroup", text: "53. For each statement regarding digital collaboration, select Yes if true, No if false.", statements: ["Digital collaboration saves money on travel costs.", "Digital collaboration is the best way to form close friendships.", "Digital collaboration makes it easier to involve people with expertise on specific topics.", "Digital collaboration is less flexible than face-to-face meetings."], correctAnswers: [true, false, true, false] },
+        { type: "mcSingle", text: "54. Why should you avoid posting demeaning photographs, harassing people, or advocating negative ideas like suicide or terrorism online?", options: ["Your online identity is formed by what you post.", "It is illegal.", "You might anger the wrong people.", "You could be fined."], correct: [0] },
+        { type: "mcSingle", text: "55. A post on Facebook makes statements shared by many. How can you determine whether the statements are true?", options: ["Everything posted on the Internet is true.", "If I want to believe it, the information must be true.", "If lots of people are sharing and commenting, the information must be true.", "Search for the information online and try to find the original source."], correct: [3] },
+        { type: "mc", text: "56. You just received a new smartphone and want to ensure personal files won’t be lost. Which three items should you regularly back up? (Choose 3)", options: ["Contacts", "Photos", "Text messages", "Installed games", "Ringtone settings"], correct: [0,1,2] },
+        { type: "mc", text: "57. Which two are common print settings? (Choose 2)", options: ["Pages per sheet", "Printing two lines at a time", "Slides per page", "Transparent printing"], correct: [0,2] },
+        { type: "mcSingle", text: "58. Your friends discovered an app that can show on a map where the smartphone of each friend is located. What technology is used?", options: ["Navigation Tracking", "spyware", "social media", "mapping"], correct: [0] },   // Navigation Tracking
+        { type: "mc", text: "59. You just created an account on a new social media site. Which two statements must you consider before posting? (Choose 2)", options: ["Minimum age requirements may differ on each social media site.", "Each social media site has its own guidelines you must follow.", "The minimum age requirement on all social media sites is 13 years old.", "You can post and share anything you want.", "All social media sites have the same guidelines."], correct: [0,1] },
+        { type: "mcSingle", text: "60. What mental health issue can excessive social media use potentially lead to?", options: ["Improved social connections", "Enhanced emotional resilience", "Increased risk of mood swings", "Heightened feelings of happiness"], correct: [2] },
+        { type: "mc", text: "61. Which two common online activities expose your personal security by navigation tracking? (Choose 2)", options: ["Posting to a blog", "Playing online games", "Uploading a vacation photo from last summer", "Posting location information with a selfie you just photographed", "\"Checking in\" your physical location on social media sites"], correct: [3,4] },
+        { type: "mcSingle", text: "62. What are the benefits of private mode browsing?", options: ["The packets sent/received across your school network cannot be seen.", "Your name is kept private.", "No history, cookies, passwords, or temporary files are recorded on the computer.", "Your computer login and password are disabled."], correct: [2] },
+        { type: "mcSingle", text: "63. Which of the following demonstrates the use of inclusive language?", options: ["Hey, girlfriends! Where are we meeting?", "Hi, guys! Where are we meeting?", "Hey, everyone! Where are we meeting?", "Hey, bros! Where are we meeting?"], correct: [2] }
+    ];
+
+    function renderFullTest() {
+        const root = document.getElementById('root');
+        root.innerHTML = '';
+        fullTest.forEach((item, idx) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `card-${idx}`;
+            let inner = `<div class="q-text">${item.text}</div>`;
+            if (item.type === 'mc') {
+                inner += `<div class="options" data-qidx="${idx}" data-type="mc" data-correct='${JSON.stringify(item.correct)}'>`;
+                item.options.forEach((opt, optIdx) => {
+                    inner += `<div class="option"><input type="checkbox" name="q${idx}" value="${optIdx}" id="mc_${idx}_${optIdx}"> <label for="mc_${idx}_${optIdx}">${opt}</label></div>`;
+                });
+                inner += `</div><div class="feedback" id="fb-${idx}"></div>`;
+            } else if (item.type === 'mcSingle') {
+                inner += `<div class="options" data-qidx="${idx}" data-type="mcsingle" data-correct='${JSON.stringify(item.correct)}'>`;
+                item.options.forEach((opt, optIdx) => {
+                    inner += `<div class="option"><input type="radio" name="q${idx}" value="${optIdx}" id="single_${idx}_${optIdx}"> <label for="single_${idx}_${optIdx}">${opt}</label></div>`;
+                });
+                inner += `</div><div class="feedback" id="fb-${idx}"></div>`;
+            } else if (item.type === 'tfGroup' || item.type === 'yesnoGroup') {
+                const isYesNo = item.type === 'yesnoGroup';
+                inner += `<div class="truefalse-panel" data-qidx="${idx}">`;
+                item.statements.forEach((stmt, sidx) => {
+                    inner += `<div class="tf-item"><span>${stmt}</span> 
+                        <select id="tf_${idx}_${sidx}">
+                            <option value="true">${isYesNo ? 'Yes' : 'True'}</option>
+                            <option value="false">${isYesNo ? 'No' : 'False'}</option>
+                        </select>
+                    </div>`;
+                });
+                inner += `</div><div class="feedback" id="fb-${idx}"></div>`;
+            } else if (item.type === 'matching') {
+                inner += `<div class="match-row"><div class="match-left">`;
+                item.terms.forEach((term, tIdx) => {
+                    inner += `<div><strong>${term}</strong> → 
+                    <select id="match_${idx}_${tIdx}" data-termidx="${tIdx}">
+                        <option value="">-- tanlang --</option>`;
+                    item.definitions.forEach((def, dIdx) => {
+                        inner += `<option value="${dIdx}">${def.length > 70 ? def.substring(0,70)+'…' : def}</option>`;
+                    });
+                    inner += `</select></div><br>`;
+                });
+                inner += `</div><div class="match-right"><strong>📌 Taʼriflar:</strong><br>${item.definitions.map((d,i)=>`${i+1}. ${d}`).join('<br>')}</div></div>`;
+                inner += `<div class="feedback" id="fb-${idx}"></div>`;
+            }
+            card.innerHTML = inner;
+            root.appendChild(card);
+        });
+    }
+
+    function checkAllAnswers() {
+        fullTest.forEach((item, idx) => {
+            const fb = document.getElementById(`fb-${idx}`);
+            if (!fb) return;
+            if (item.type === 'mc') {
+                const checks = document.querySelectorAll(`#card-${idx} input[type="checkbox"]`);
+                const selected = Array.from(checks).filter(cb => cb.checked).map(cb => parseInt(cb.value));
+                const correctArr = item.correct;
+                const ok = selected.length === correctArr.length && correctArr.every(v => selected.includes(v));
+                fb.innerHTML = ok ? '✅ To‘g‘ri javob!' : `❌ To‘g‘ri javoblar: ${correctArr.map(c => item.options[c]).join(', ')}`;
+                fb.style.color = ok ? '#116b47' : '#b22234';
+            } else if (item.type === 'mcSingle') {
+                const radios = document.querySelectorAll(`#card-${idx} input[type="radio"]`);
+                let selectedVal = null;
+                for (let r of radios) if (r.checked) selectedVal = parseInt(r.value);
+                const correctIdx = item.correct[0];
+                const ok = (selectedVal === correctIdx);
+                fb.innerHTML = ok ? '✅ To‘g‘ri!' : `❌ To‘g‘ri javob: ${item.options[correctIdx]}`;
+            } else if (item.type === 'tfGroup' || item.type === 'yesnoGroup') {
+                let allOk = true;
+                for (let s = 0; s < item.statements.length; s++) {
+                    const sel = document.getElementById(`tf_${idx}_${s}`);
+                    if (sel && (sel.value === 'true') !== item.correctAnswers[s]) allOk = false;
+                }
+                fb.innerHTML = allOk ? '✅ Barcha javoblar to‘g‘ri!' : '❌ Ayrim javoblar noto‘g‘ri. Qayta tekshiring.';
+            } else if (item.type === 'matching') {
+                let matchOk = true;
+                for (let t = 0; t < item.terms.length; t++) {
+                    const sel = document.getElementById(`match_${idx}_${t}`);
+                    if (sel && parseInt(sel.value) !== item.correctMapping[t]) matchOk = false;
+                }
+                fb.innerHTML = matchOk ? '✅ Moslashtirish to‘g‘ri!' : '❌ Moslashtirishda xato bor. To‘g‘ri juftliklarni tanlang.';
+            }
+        });
+    }
+
+    renderFullTest();
+    document.getElementById('globalCheck').addEventListener('click', checkAllAnswers);
+</script>
+</body>
+</html>
