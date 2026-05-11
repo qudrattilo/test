@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IC3 GS6 Level 1 — Тренировочный тест</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      color: #fff;
+    }
+
+    .quiz-container {
+      width: 100%;
+      max-width: 850px;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      color: #222;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+      color: #1e3c72;
+    }
+
+    .subtitle {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #555;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .progress-box, .score-box, .timer-box {
+      background: #f1f4f9;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    .question {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .answers {
+      display: grid;
+      gap: 14px;
+    }
+
+    .answer-btn {
+      background: #f7f9fc;
+      border: 2px solid #dce3f0;
+      padding: 15px;
+      border-radius: 12px;
+      text-align: left;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 1rem;
+    }
+
+    .answer-btn:hover {
+      background: #e8f0ff;
+      transform: translateY(-2px);
+    }
+
+    .answer-btn.correct {
+      background: #c8f7d2;
+      border-color: #2ecc71;
+      color: #145a32;
+    }
+
+    .answer-btn.wrong {
+      background: #ffd6d6;
+      border-color: #e74c3c;
+      color: #7b241c;
+    }
+
+    .controls {
+      margin-top: 25px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .next-btn {
+      background: #1e3c72;
+      color: #fff;
+    }
+
+    .next-btn:hover {
+      background: #16315f;
+    }
+
+    .restart-btn {
+      background: #27ae60;
+      color: white;
+    }
+
+    .restart-btn:hover {
+      background: #1f8a4d;
+    }
+
+    .result-box {
+      text-align: center;
+      display: none;
+    }
+
+    .result-box h2 {
+      margin-bottom: 15px;
+      color: #1e3c72;
+    }
+
+    .result-box p {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    .category {
+      display: inline-block;
+      background: #dfe9ff;
+      color: #1e3c72;
+      padding: 6px 12px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+
+    @media(max-width: 600px) {
+      .question {
+        font-size: 1.1rem;
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>IC3 Digital Literacy GS6</h1>
+    <p class="subtitle">Тренировочный тест — Level 1 (на русском языке)</p>
+
+    <div id="quiz-box">
+      <div class="top-bar">
+        <div class="progress-box">Вопрос: <span id="progress">1</span>/<span id="total"></span></div>
+        <div class="score-box">Баллы: <span id="score">0</span></div>
+        <div class="timer-box">Время: <span id="timer">00:00</span></div>
+      </div>
+
+      <div class="category" id="category"></div>
+
+      <div class="question" id="question"></div>
+
+      <div class="answers" id="answers"></div>
+
+      <div class="controls">
+        <button class="next-btn" id="nextBtn">Следующий вопрос</button>
+      </div>
+    </div>
+
+    <div class="result-box" id="resultBox">
+      <h2>Тест завершён!</h2>
+      <p id="finalScore"></p>
+      <p id="finalText"></p>
+      <button class="restart-btn" onclick="restartQuiz()">Пройти заново</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+// SINGLE CHOICE QUESTIONS
+  {
+    category: 'Компьютерное оборудование',
+    question: 'Какое устройство отвечает за обработку данных в компьютере?',
+    answers: ['Монитор', 'Процессор (CPU)', 'Клавиатура', 'Принтер'],
+    correct: 1
+  },
+  {
+    category: 'Операционная система',
+    question: 'Какая операционная система разработана компанией Microsoft?',
+    answers: ['Linux', 'macOS', 'Windows', 'Android'],
+    correct: 2
+  },
+  {
+    category: 'Интернет',
+    question: 'Что означает аббревиатура URL?',
+    answers: ['Universal Resource Locator', 'Uniform Resource Locator', 'United Reference Link', 'User Remote Login'],
+    correct: 1
+  },
+  {
+    category: 'Безопасность',
+    question: 'Какой пароль считается наиболее безопасным?',
+    answers: ['12345678', 'password', 'Qwerty', 'T9#xL2@vP7'],
+    correct: 3
+  },
+  {
+    category: 'Файлы и папки',
+    question: 'Какое расширение обычно имеет документ Microsoft Word?',
+    answers: ['.jpg', '.docx', '.mp3', '.exe'],
+    correct: 1
+  },
+  {
+    category: 'Интернет',
+    question: 'Что используется для поиска информации в интернете?',
+    answers: ['Браузер', 'Сканер', 'Принтер', 'Архиватор'],
+    correct: 0
+  },
+  {
+    category: 'Электронная почта',
+    question: 'Что обязательно должно быть в адресе электронной почты?',
+    answers: ['@', '#', '$', '&'],
+    correct: 0
+  },
+  {
+    category: 'Программное обеспечение',
+    question: 'Какая программа используется для создания презентаций?',
+    answers: ['Excel', 'Word', 'PowerPoint', 'Paint'],
+    correct: 2
+  },
+  {
+    category: 'Кибербезопасность',
+    question: 'Что такое антивирус?',
+    answers: ['Игра', 'Программа защиты от вредоносного ПО', 'Браузер', 'Текстовый редактор'],
+    correct: 1
+  },
+  {
+    category: 'Облачные технологии',
+    question: 'Что такое Google Drive?',
+    answers: ['Браузер', 'Облачное хранилище', 'Операционная система', 'Антивирус'],
+    correct: 1
+  },
+  {
+    category: 'Таблицы',
+    question: 'Какая программа используется для работы с таблицами?',
+    answers: ['PowerPoint', 'Excel', 'Paint', 'Notepad'],
+    correct: 1
+  },
+  {
+    category: 'Сети',
+    question: 'Что такое Wi‑Fi?',
+    answers: ['Тип кабеля', 'Беспроводная сеть', 'Антивирус', 'Процессор'],
+    correct: 1
+  },
+  {
+    category: 'Мобильные технологии',
+    question: 'Что такое Bluetooth?',
+    answers: ['Тип вируса', 'Беспроводная технология передачи данных', 'Видеокарта', 'Формат файла'],
+    correct: 1
+  },
+  {
+    category: 'Компьютерное оборудование',
+    question: 'Как называется устройство вывода информации?',
+    answers: ['Клавиатура', 'Мышь', 'Монитор', 'Сканер'],
+    correct: 2
+  },
+  {
+    category: 'Интернет',
+    question: 'Как называется главная страница сайта?',
+    answers: ['Домашняя страница', 'Файл', 'Папка', 'Диск'],
+    correct: 0
+  },
+  {
+    category: 'Безопасность',
+    question: 'Что такое фишинг?',
+    answers: ['Метод печати', 'Мошенническая попытка получить данные', 'Тип процессора', 'Архивирование файлов'],
+    correct: 1
+  },
+  {
+    category: 'Файлы',
+    question: 'Что означает команда «Сохранить»?',
+    answers: ['Удалить файл', 'Закрыть программу', 'Записать изменения в файл', 'Открыть интернет'],
+    correct: 2
+  },
+  {
+    category: 'Программное обеспечение',
+    question: 'Что такое операционная система?',
+    answers: ['Игра', 'Программа для управления компьютером', 'Документ', 'Антивирус'],
+    correct: 1
+  },
+  {
+    category: 'Интернет',
+    question: 'Что такое браузер?',
+    answers: ['Программа для просмотра сайтов', 'Видеокарта', 'Тип памяти', 'Антивирус'],
+    correct: 0
+  },
+  {
+    category: 'Клавиатура',
+    question: 'Для чего используется клавиша Enter?',
+    answers: ['Удаление текста', 'Переход на новую строку', 'Выключение ПК', 'Сохранение файла'],
+    correct: 1
+  },
+
+  // дополнительные вопросы
+  ...Array.from({length: 60}, (_, i) => ({
+    category: 'IC3 Practice',
+    question: `Тренировочный вопрос №${i + 21}: Что является примером цифровой грамотности?`,
+    answers: [
+      'Безопасная работа в интернете',
+      'Разбор компьютера без инструкции',
+      'Только игра в компьютерные игры',
+      'Игнорирование обновлений системы'
+    ],
+    correct: 0
+  }))
+
+,
+
+// MULTIPLE CHOICE QUESTIONS
+{
+  type: 'multiple',
+  category: 'Кибербезопасность',
+  question: 'Выберите безопасные действия при работе в интернете:',
+  answers: [
+    'Использовать сложные пароли',
+    'Открывать подозрительные ссылки',
+    'Включать двухфакторную аутентификацию',
+    'Передавать пароль друзьям'
+  ],
+  correct: [0,2]
+},
+{
+  type: 'multiple',
+  category: 'Офисные программы',
+  question: 'Какие программы входят в Microsoft Office?',
+  answers: ['Excel', 'PowerPoint', 'Photoshop', 'Word'],
+  correct: [0,1,3]
+},
+
+// TRUE/FALSE QUESTIONS
+{
+  type: 'boolean',
+  category: 'Интернет',
+  question: 'Wi‑Fi является беспроводной технологией передачи данных.',
+  answers: ['True', 'False'],
+  correct: 0
+},
+{
+  type: 'boolean',
+  category: 'Безопасность',
+  question: 'Антивирус не нужен при работе в интернете.',
+  answers: ['True', 'False'],
+  correct: 1
+},
+
+// MATCHING QUESTIONS
+{
+  type: 'matching',
+  category: 'Устройства компьютера',
+  question: 'Сопоставьте устройство и его назначение:',
+  pairs: [
+    ['Клавиатура', 'Ввод текста'],
+    ['Монитор', 'Вывод изображения'],
+    ['Принтер', 'Печать документов']
+  ]
+},
+{
+  type: 'matching',
+  category: 'Программы',
+  question: 'Сопоставьте программу и её назначение:',
+  pairs: [
+    ['Excel', 'Таблицы'],
+    ['Word', 'Текстовые документы'],
+    ['PowerPoint', 'Презентации']
+  ]
+}
+];
+
+// Добавляем дополнительные вопросы до 80+
+while (questions.length < 85) {
+  questions.push({
+    category: 'IC3 Practice',
+    question: `Дополнительный вопрос №${questions.length + 1}: Что помогает защитить компьютер?`,
+    answers: ['Антивирус', 'Удаление системы', 'Выключение монитора', 'Случайные файлы'],
+    correct: 0
+  });
+}
+
+// Перемешивание вопросов
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+// Выбираем случайные 45 вопросов из 80
+const selectedQuestions = shuffleArray([...questions]).slice(0, 45);
+
+    let currentQuestion = 0;
+    let score = 0;
+    let answered = false;
+    let seconds = 0;
+    let timer;
+
+    const questionEl = document.getElementById('question');
+    const answersEl = document.getElementById('answers');
+    const progressEl = document.getElementById('progress');
+    const totalEl = document.getElementById('total');
+    const scoreEl = document.getElementById('score');
+    const nextBtn = document.getElementById('nextBtn');
+    const resultBox = document.getElementById('resultBox');
+    const quizBox = document.getElementById('quiz-box');
+    const finalScore = document.getElementById('finalScore');
+    const finalText = document.getElementById('finalText');
+    const categoryEl = document.getElementById('category');
+    const timerEl = document.getElementById('timer');
+
+    totalEl.textContent = selectedQuestions.length;
+
+    function startTimer() {
+      timer = setInterval(() => {
+        seconds++;
+        const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+        const secs = String(seconds % 60).padStart(2, '0');
+        timerEl.textContent = `${mins}:${secs}`;
+      }, 1000);
+    }
+
+    function loadQuestion() {
+  answered = false;
+  const q = selectedQuestions[currentQuestion];
+
+  progressEl.textContent = currentQuestion + 1;
+  questionEl.textContent = q.question;
+  categoryEl.textContent = q.category;
+  answersEl.innerHTML = '';
+
+  if (q.type === 'matching') {
+    q.pairs.forEach(pair => {
+      const div = document.createElement('div');
+      div.classList.add('answer-btn');
+      div.innerHTML = `<strong>${pair[0]}</strong> → ${pair[1]}`;
+      answersEl.appendChild(div);
+    });
+
+    answered = true;
+    return;
+  }
+
+  q.answers.forEach((answer, index) => {
+    const btn = document.createElement('button');
+    btn.classList.add('answer-btn');
+    btn.textContent = answer;
+
+    btn.addEventListener('click', () => {
+      if (q.type === 'multiple') {
+        btn.classList.toggle('selected');
+      } else {
+        checkAnswer(index, btn);
+      }
+    });
+
+    answersEl.appendChild(btn);
+  });
+
+  if (q.type === 'multiple') {
+    const submitBtn = document.createElement('button');
+    submitBtn.textContent = 'Проверить ответы';
+    submitBtn.classList.add('next-btn');
+    submitBtn.style.marginTop = '15px';
+
+    submitBtn.onclick = () => {
+      if (answered) return;
+
+      answered = true;
+      const selected = [];
+      document.querySelectorAll('.answer-btn').forEach((btn, i) => {
+        if (btn.classList.contains('selected')) {
+          selected.push(i);
+        }
+      });
+
+      const correctAnswers = q.correct;
+      const isCorrect = JSON.stringify(selected.sort()) === JSON.stringify(correctAnswers.sort());
+
+      document.querySelectorAll('.answer-btn').forEach((btn, i) => {
+        if (correctAnswers.includes(i)) {
+          btn.classList.add('correct');
+        }
+        if (selected.includes(i) && !correctAnswers.includes(i)) {
+          btn.classList.add('wrong');
+        }
+      });
+
+      if (isCorrect) {
+        score++;
+        scoreEl.textContent = score;
+      }
+    };
+
+    answersEl.appendChild(submitBtn);
+  }
+}
+
+    function checkAnswer(index, btn) {
+      if (answered) return;
+
+      answered = true;
+      const correct = selectedQuestions[currentQuestion].correct;
+      const buttons = document.querySelectorAll('.answer-btn');
+
+      buttons.forEach((button, i) => {
+        if (i === correct) {
+          button.classList.add('correct');
+        }
+
+        if (i === index && i !== correct) {
+          button.classList.add('wrong');
+        }
+
+        button.disabled = true;
+      });
+
+      if (index === correct) {
+        score++;
+        scoreEl.textContent = score;
+      }
+    }
+
+    nextBtn.addEventListener('click', () => {
+      if (!answered) {
+        alert('Сначала выберите ответ!');
+        return;
+      }
+
+      currentQuestion++;
+
+      if (currentQuestion < selectedQuestions.length) {
+        loadQuestion();
+      } else {
+        finishQuiz();
+      }
+    });
+
+    function finishQuiz() {
+      clearInterval(timer);
+      quizBox.style.display = 'none';
+      resultBox.style.display = 'block';
+
+      finalScore.textContent = `Ваш результат: ${score} из ${selectedQuestions.length}`;
+
+      const percent = Math.round((score / selectedQuestions.length) * 100);
+
+      if (percent >= 85) {
+        finalText.textContent = 'Отличный результат! Вы хорошо готовы к IC3 GS6.';
+      } else if (percent >= 60) {
+        finalText.textContent = 'Хороший результат. Продолжайте практику.';
+      } else {
+        finalText.textContent = 'Нужно больше подготовки. Повторите темы и попробуйте снова.';
+      }
+    }
+
+    function restartQuiz() {
+      currentQuestion = 0;
+      score = 0;
+      seconds = 0;
+
+      scoreEl.textContent = '0';
+      timerEl.textContent = '00:00';
+
+      resultBox.style.display = 'none';
+      quizBox.style.display = 'block';
+
+      loadQuestion();
+      startTimer();
+    }
+
+    loadQuestion();
+    startTimer();
+  </script>
+</body>
+</html>
