@@ -4,224 +4,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IC3 GS6 Level 1 Test</title>
-    <style>
-        :root {
-            --primary: #2563eb;
-            --bg: #f8fafc;
-            --text: #1e293b;
-        }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: var(--primary); }
-        .quiz-info { text-align: center; margin-bottom: 20px; font-weight: bold; }
-        .question-card { display: none; margin-bottom: 20px; }
-        .question-card.active { display: block; }
-        .question-text { font-size: 1.2rem; margin-bottom: 15px; font-weight: 600; }
-        .options { display: flex; flex-direction: column; gap: 10px; }
-        .option { padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: 0.3s; }
-        .option:hover { background: #eff6ff; border-color: var(--primary); }
-        .option.selected { background: var(--primary); color: white; border-color: var(--primary); }
-        
-        /* Matching question styles */
-        .match-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .match-item { padding: 10px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 4px; margin-bottom: 5px; }
-        select { width: 100%; padding: 8px; border-radius: 4px; }
-
-        .controls { display: flex; justify-content: space-between; margin-top: 30px; }
-        button { padding: 10px 25px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.3s; }
-        .btn-next { background: var(--primary); color: white; }
-        .btn-prev { background: #64748b; color: white; }
-        #result-area { text-align: center; display: none; }
-        .score { font-size: 2rem; color: var(--primary); margin: 20px 0; }
-    </style>
+    <title>IC3 GS6 Level 1 – Тренировочный тест</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="container">
+        <header>
+            <h1>IC3 GS6 Уровень 1</h1>
+            <p class="subtitle">Пробный тест: 45 случайных вопросов из 80</p>
+        </header>
 
-<div class="container">
-    <h1>IC3 GS6 Level 1: Подготовка</h1>
-    <div id="quiz-container">
-        <div class="quiz-info">Вопрос <span id="current-idx">1</span> из 45</div>
-        <div id="questions-area"></div>
-        <div class="controls">
-            <button class="btn-prev" onclick="prevQuestion()">Назад</button>
-            <button class="btn-next" onclick="nextQuestion()">Далее</button>
+        <div id="startBlock">
+            <p>Тест содержит вопросы четырёх типов:</p>
+            <ul>
+                <li><strong>Одиночный выбор</strong> – один правильный ответ</li>
+                <li><strong>Множественный выбор</strong> – 2–3 правильных ответа</li>
+                <li><strong>Верно / Неверно</strong></li>
+                <li><strong>Сопоставление</strong></li>
+            </ul>
+            <button id="startBtn">Начать тест</button>
+        </div>
+
+        <div id="testBlock" class="hidden">
+            <form id="testForm"></form>
+            <div class="actions">
+                <button id="submitBtn">Проверить результаты</button>
+            </div>
+        </div>
+
+        <div id="resultBlock" class="hidden">
+            <h2>Результаты</h2>
+            <div id="scoreDisplay"></div>
+            <div id="detailedResults"></div>
+            <button id="retryBtn">Пройти ещё раз</button>
         </div>
     </div>
 
-    <div id="result-area">
-        <h2>Результаты теста</h2>
-        <div class="score" id="score-text"></div>
-        <button class="btn-next" onclick="location.reload()">Начать заново</button>
-    </div>
-</div>
-
-<script>
-// Testlar bazasi (Namuna sifatida bir nechtasi keltirilgan, 80 tagacha to'ldirish mumkin)
-const allQuestions = [
-    {
-        type: "single",
-        q: "Что из перечисленного является операционной системой?",
-        options: ["Microsoft Word", "Windows 11", "Google Chrome", "Intel Core i7"],
-        correct: 1
-    },
-    {
-        type: "multiple",
-        q: "Выберите два устройства ввода: (Выберите 2)",
-        options: ["Монитор", "Клавиатура", "Принтер", "Мышь"],
-        correct: [1, 3]
-    },
-    {
-        type: "boolean",
-        q: "Облачное хранилище требует подключения к Интернету для синхронизации файлов.",
-        options: ["Верно", "Неверно"],
-        correct: 0
-    },
-    {
-        type: "matching",
-        q: "Сопоставьте устройство с его категорией:",
-        pairs: [
-            { item: "Процессор", category: "Обработка данных" },
-            { item: "Жесткий диск", category: "Хранение данных" },
-            { item: "Сканер", category: "Ввод данных" }
-        ]
-    },
-    {
-        type: "single",
-        q: "Какое сочетание клавиш используется для копирования текста?",
-        options: ["Ctrl + V", "Ctrl + X", "Ctrl + C", "Ctrl + P"],
-        correct: 2
-    },
-    {
-        type: "multiple",
-        q: "Какие из этих сервисов являются облачными хранилищами? (Выберите 2)",
-        options: ["OneDrive", "Linux", "Google Drive", "Photoshop"],
-        correct: [0, 2]
-    }
-    // Shu yerga 80 tagacha savollarni qo'shish mumkin...
-];
-
-// Savollarni tasodifiy tanlash (45 ta)
-let selectedQuestions = allQuestions.sort(() => 0.5 - Math.random()).slice(0, 45);
-let currentStep = 0;
-let userAnswers = new Array(selectedQuestions.length).fill(null);
-
-function renderQuestion() {
-    const container = document.getElementById('questions-area');
-    container.innerHTML = '';
-    const qData = selectedQuestions[currentStep];
-    
-    const card = document.createElement('div');
-    card.className = 'question-card active';
-    
-    const qText = document.createElement('div');
-    qText.className = 'question-text';
-    qText.innerText = qData.q;
-    card.appendChild(qText);
-
-    const optionsDiv = document.createElement('div');
-    optionsDiv.className = 'options';
-
-    if (qData.type === 'single' || qData.type === 'boolean') {
-        qData.options.forEach((opt, idx) => {
-            const optEl = document.createElement('div');
-            optEl.className = `option ${userAnswers[currentStep] === idx ? 'selected' : ''}`;
-            optEl.innerText = opt;
-            optEl.onclick = () => {
-                userAnswers[currentStep] = idx;
-                renderQuestion();
-            };
-            optionsDiv.appendChild(optEl);
-        });
-    } else if (qData.type === 'multiple') {
-        if (!userAnswers[currentStep]) userAnswers[currentStep] = [];
-        qData.options.forEach((opt, idx) => {
-            const optEl = document.createElement('div');
-            optEl.className = `option ${userAnswers[currentStep].includes(idx) ? 'selected' : ''}`;
-            optEl.innerText = opt;
-            optEl.onclick = () => {
-                const pos = userAnswers[currentStep].indexOf(idx);
-                if (pos > -1) userAnswers[currentStep].splice(pos, 1);
-                else userAnswers[currentStep].push(idx);
-                renderQuestion();
-            };
-            optionsDiv.appendChild(optEl);
-        });
-    } else if (qData.type === 'matching') {
-        const matchDiv = document.createElement('div');
-        matchDiv.className = 'match-container';
-        if (!userAnswers[currentStep]) userAnswers[currentStep] = {};
-        
-        qData.pairs.forEach((pair, idx) => {
-            const left = document.createElement('div');
-            left.className = 'match-item';
-            left.innerText = pair.item;
-            
-            const right = document.createElement('div');
-            let selectHtml = `<select onchange="saveMatch(${idx}, this.value)"><option value="">Выберите...</option>`;
-            qData.pairs.forEach(p => {
-                const selected = userAnswers[currentStep][idx] === p.category ? 'selected' : '';
-                selectHtml += `<option value="${p.category}" ${selected}>${p.category}</option>`;
-            });
-            selectHtml += `</select>`;
-            right.innerHTML = selectHtml;
-            
-            matchDiv.appendChild(left);
-            matchDiv.appendChild(right);
-        });
-        optionsDiv.appendChild(matchDiv);
-    }
-
-    card.appendChild(optionsDiv);
-    container.appendChild(card);
-    document.getElementById('current-idx').innerText = currentStep + 1;
-}
-
-function saveMatch(idx, value) {
-    userAnswers[currentStep][idx] = value;
-}
-
-function nextQuestion() {
-    if (currentStep < selectedQuestions.length - 1) {
-        currentStep++;
-        renderQuestion();
-    } else {
-        showResults();
-    }
-}
-
-function prevQuestion() {
-    if (currentStep > 0) {
-        currentStep--;
-        renderQuestion();
-    }
-}
-
-function showResults() {
-    let score = 0;
-    selectedQuestions.forEach((q, i) => {
-        const ans = userAnswers[i];
-        if (q.type === 'single' || q.type === 'boolean') {
-            if (ans === q.correct) score++;
-        } else if (q.type === 'multiple') {
-            if (JSON.stringify(ans?.sort()) === JSON.stringify(q.correct.sort())) score++;
-        } else if (q.type === 'matching') {
-            let correctMatches = 0;
-            q.pairs.forEach((p, idx) => {
-                if (ans && ans[idx] === p.category) correctMatches++;
-            });
-            if (correctMatches === q.pairs.length) score++;
-        }
-    });
-
-    document.getElementById('quiz-container').style.display = 'none';
-    const resArea = document.getElementById('result-area');
-    resArea.style.display = 'block';
-    document.getElementById('score-text').innerText = `${score} из ${selectedQuestions.length}`;
-}
-
-renderQuestion();
-</script>
-
+    <script src="script.js"></script>
 </body>
 </html>
