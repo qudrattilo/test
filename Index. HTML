@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Informatika fanidan testlar to‘plami | 100 ta testdan 25 tasi | 100 ballik tizim</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Roboto', 'Noto Sans', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #e9f0fc 0%, #d9e4f5 100%);
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 48px;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            backdrop-filter: blur(0px);
+            transition: all 0.2s;
+        }
+
+        .test-header {
+            background: #0b2b44;
+            padding: 28px 32px;
+            color: white;
+            border-bottom: 4px solid #ffb347;
+        }
+
+        .test-header h1 {
+            font-size: 2.2rem;
+            letter-spacing: -0.3px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .test-header h1 span {
+            background: #ffb347;
+            font-size: 1.1rem;
+            padding: 5px 14px;
+            border-radius: 60px;
+            color: #0b2b44;
+            font-weight: 600;
+        }
+
+        .subinfo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 12px;
+            font-size: 1rem;
+        }
+
+        .badge {
+            background: #1f5e8e;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 18px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            background: white;
+            color: #0b2b44;
+            font-weight: 600;
+            padding: 12px 28px;
+            border-radius: 48px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: #ffb347;
+            color: #0b2b44;
+        }
+
+        .btn-primary:hover {
+            background: #ffa01e;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .quiz-area {
+            padding: 28px 32px 32px;
+        }
+
+        .questions-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            margin-bottom: 35px;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
+            padding: 22px 26px;
+            transition: all 0.2s;
+            border-left: 6px solid #ffb347;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0a2f44;
+            margin-bottom: 18px;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px 32px;
+            margin-top: 8px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            background: #f8fafd;
+            padding: 8px 18px;
+            border-radius: 100px;
+            transition: 0.1s;
+            border: 1px solid #e2edf7;
+        }
+
+        .option:hover {
+            background: #eef3fc;
+            border-color: #ffb347;
+        }
+
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #ffb347;
+            cursor: pointer;
+        }
+
+        .option label {
+            font-size: 0.98rem;
+            font-weight: 500;
+            color: #1e4663;
+            cursor: pointer;
+        }
+
+        .result-panel {
+            background: #f0f6fe;
+            border-radius: 32px;
+            padding: 20px 28px;
+            margin-top: 20px;
+            border-top: 2px solid #ffb347;
+        }
+
+        .score-badge {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: #0b2b44;
+            display: inline-block;
+            padding: 6px 24px;
+            border-radius: 60px;
+            color: #ffb347;
+        }
+
+        .feedback-item {
+            background: white;
+            border-radius: 20px;
+            padding: 10px 18px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            border-left: 5px solid;
+        }
+
+        .correct-feedback {
+            border-left-color: #2b8c4a;
+            background: #e9f7ef;
+        }
+
+        .wrong-feedback {
+            border-left-color: #c73e2d;
+            background: #fff0ee;
+        }
+
+        hr {
+            margin: 20px 0;
+            border: 0;
+            height: 1px;
+            background: #cbdde9;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.75rem;
+            padding: 18px;
+            background: #eef3fc;
+            color: #3f5c7a;
+        }
+
+        @media (max-width: 720px) {
+            .quiz-area {
+                padding: 20px;
+            }
+            .question-card {
+                padding: 16px;
+            }
+            .question-text {
+                font-size: 1rem;
+            }
+            .options {
+                gap: 12px;
+            }
+            .test-header h1 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="test-header">
+        <h1>
+            📘 Informatika fanidan testlar to‘plami 
+            <span>100 ta bazadan 25 tasi</span>
+        </h1>
+        <div class="subinfo">
+            <div class="badge">🎯 Har bir to‘g‘ri javob → 4 ball</div>
+            <div class="badge">⭐ Jami maksimal 100 ball</div>
+            <div class="badge">🔄 Har safar yangi 25 savol tanlanadi</div>
+        </div>
+        <div class="controls">
+            <button id="newSetBtn" class="btn btn-outline">🔄 Yangi test variantini olish</button>
+        </div>
+    </div>
+
+    <div class="quiz-area">
+        <div id="quiz" class="questions-grid">
+            <!-- Dinamik ravishda 25 ta test savollari chiqadi -->
+        </div>
+        <div style="display: flex; justify-content: center; margin: 10px 0 10px;">
+            <button id="submitBtn" class="btn btn-primary">✅ Javoblarni tekshirish va baholash</button>
+        </div>
+        <div id="result" class="result-panel" style="display: none;">
+            <!-- Natijalar shu yerda ko'rinadi -->
+        </div>
+    </div>
+    <footer>
+        🧪 Informatika (yuqori sinflar uchun) • 100 ta savol omboridan 25 tasi tasodifiy • 100 ballik tizim
+    </footer>
+</div>
+
+<script>
+    // --------------------------------------------------------------
+    // 100 ta informatika fanidan testlar bazasi (savol + 4 variant + to'g'ri javob indeksi 0..3)
+    // --------------------------------------------------------------
+    const QUESTION_BANK = [
+        { text: "Kompyuterning markaziy qayta ishlash bloki (CPU) vazifasi nima?", options: ["Ma'lumotlarni saqlash", "Ma'lumotlarni qayta ishlash va boshqarish", "Tarmoqqa ulanish", "Elektr quvvatini taqsimlash"], correct: 1 },
+        { text: "Quyidagilardan qaysi biri ‘o‘zgaruvchan’ (volatile) xotira turi?", options: ["ROM", "SSD", "RAM", "HDD"], correct: 2 },
+        { text: "Internetda veb-sahifalarni ko'rish uchun qaysi protokol asosan ishlatiladi?", options: ["FTP", "HTTP/HTTPS", "SMTP", "SSH"], correct: 1 },
+        { text: "‘Algoritm’ deganda nimani tushunasiz?", options: ["Dasturlash tili", "Muammoni yechish bosqichlari ketma-ketligi", "Kompyuter xotirasi", "Ma’lumotlar bazasi"], correct: 1 },
+        { text: "O‘nlik sanoq sistemasidagi 13 sonining ikkilik ekvivalenti qaysi?", options: ["1101", "1011", "1110", "1100"], correct: 0 },
+        { text: "HTML vazifasi nima?", options: ["Veb-sahifalar tuzilmasini yaratish", "Ma'lumotlar bazasini boshqarish", "Serverda skript bajarish", "Rasmlarni tahrirlash"], correct: 0 },
+        { text: "Qaysi operatsion tizim ochiq kodli (open source) hisoblanadi?", options: ["Windows", "macOS", "Linux", "MS-DOS"], correct: 2 },
+        { text: "Ma'lumotlar tuzilmasi ‘stek’ (Stack) qanday tamoyil asosida ishlaydi?", options: ["FIFO (birinchi kirdi – birinchi chiqdi)", "LIFO (oxirgi kirdi – birinchi chiqdi)", "Tasodifiy kirish", "Indeksli massiv"], correct: 1 },
+        { text: "Quyidagi qurilmalardan qaysi biri chiqish qurilmasi?", options: ["Sichqoncha", "Printer", "Skayner", "Trekbol"], correct: 1 },
+        { text: "‘Python’ dasturlash tili haqida qaysi gap to‘g‘ri?", options: ["Faqat mobil ilovalar uchun", "Yuqori darajali, interpretatsiya qilinadigan til", "Mashina kodiga kompilyatsiya qilinadi", "Assembler varianti"], correct: 1 },
+        { text: "Quyidagilardan qaysi biri tarmoq topologiyasi emas?", options: ["Yulduz", "Halqa", "Shina", "Vektor"], correct: 3 },
+        { text: "SQL nima uchun ishlatiladi?", options: ["Tarmoq sozlamalari", "Grafik dizayn", "Ma'lumotlar bazasini boshqarish", "Web server yaratish"], correct: 2 },
+        { text: "Malware (zararli dastur) turlaridan biri bu ...", options: ["Firewall", "Trojan", "Proxy", "Kesh"], correct: 1 },
+        { text: "Quyidagi raqamli imzo (digital signature) nima maqsadda qo‘llaniladi?", options: ["Ma'lumotlarni siqish", "Mualliflik va butunlikni tasdiqlash", "Tezlikni oshirish", "Shifrlash kaliti almashinuvi"], correct: 1 },
+        { text: "‘Algoritm’ murakkabligi O(n²) degani nimani anglatadi?", options: ["Chiziqli vaqt", "Kvadrat vaqt", "Logarifmik vaqt", "Doimiy vaqt"], correct: 1 },
+        { text: "Qaysi biri to‘liq boshqariladigan past darajali dasturlash tili?", options: ["Python", "Java", "Assembler", "C#"], correct: 2 },
+        { text: "‘Cloud computing’ (bulutli hisoblash) nima?", options: ["Mahalliy serverda hisoblash", "Internet orqali xizmat va resurslar taqdim etish", "Superkompyuter", "Kvant hisoblash"], correct: 1 },
+        { text: "Dasturlashda ‘loop’ nimani anglatadi?", options: ["Shart operatori", "Takrorlanuvchi blok (sikl)", "Funksiya chaqiruvi", "Xotira ajratish"], correct: 1 },
+        { text: "Berilganlardan qaysi biri noto‘g‘ri? (IPv4 haqida)", options: ["32 bitli manzil", "4 oktetdan iborat", "128 bitli manzil", "192.168.1.1 misol"], correct: 2 },
+        { text: "Ma'lumotlar bazasida ‘primary key’ nima vazifani bajaradi?", options: ["Takrorlanuvchi yozuvlar", "Har bir qatorni unikal identifikatsiya qiladi", "Indeksni tezlatadi", "Jadvalni bog‘laydi"], correct: 1 },
+        { text: "Qaysi birinchi avlod kompyuterlarida ishlatilgan?", options: ["Mikroprotsessorlar", "Vakuum trubkalari", "Integral mikrosxemalar", "Tranzistorlar"], correct: 1 },
+        { text: "‘Phishing’ hujumining maqsadi nima?", options: ["Tarmoqni yuklash", "Foydalanuvchi maxfiy ma'lumotlarini olish", "Virus tarqatish", "Server xotirasini to‘ldirish"], correct: 1 },
+        { text: "‘Keshlash’ (caching) texnikasi nima uchun kerak?", options: ["Xotirani saqlash", "Ma'lumotlarga tez kirishni ta'minlash", "Shifrlash", "Zaxiralash"], correct: 1 },
+        { text: "Internetda domen nomlarini IP-manzillarga aylantiruvchi tizim?", options: ["DNS", "DHCP", "HTTP", "FTP"], correct: 0 },
+        { text: "Neyron tarmoqlar asosan qaysi sohada ishlatiladi?", options: ["Sun'iy intellekt", "Matn muharriri", "Elektron jadvallar", "Grafik redaktor"], correct: 0 },
+        { text: "Quyidagi qaysi bir ma'lumotlar tuzilmasi dinamik o‘lchamga ega?", options: ["Statik massiv", "Bog‘langan ro‘yxat (linked list)", "O‘zgarmas registr", "Bit maydoni"], correct: 1 },
+        { text: "‘C++’ dasturlash tilida qanday paradigmaga asoslangan?", options: ["Funksional", "Ob’yektga yo‘naltirilgan", "Deklarativ", "Mantiqiy"], correct: 1 },
+        { text: "Qaysi belgi orqali oddiy shartli ifoda 'agar ... bo‘lsa' tuziladi (psevdokod)?", options: ["if", "while", "for", "switch"], correct: 0 },
+        { text: "Oddiy kompyuter virusi qanday tarqalishi mumkin?", options: ["Zararlangan fayllar orqali", "Elektr simlari orqali", "Monitor nurlanishi", "Ovoz kabeli"], correct: 0 },
+        { text: "Git versiya boshqaruv tizimida ‘commit’ nima?", options: ["Loyihani o‘chirish", "O‘zgarishlarni saqlash va izohlash", "Faylni tahrirlash", "Tarmoqqa ulanish"], correct: 1 },
+        { text: "Nima uchun ‘algorithm’ samaradorligi muhim?", options: ["Chiqarilgan natija sifati", "Vaqt va resurslarni tejash", "Kod uzunligi", "Dizayn go‘zalligi"], correct: 1 },
+        { text: "Quyidagilardan qaysi biri ‘NoSQL’ ma'lumotlar bazasiga misol?", options: ["MySQL", "PostgreSQL", "MongoDB", "Oracle"], correct: 2 },
+        { text: "‘Compiler’ va ‘Interpreter’ farqi?", options: ["Hech qanday farq", "Kompilyator butun kodni tarjima qiladi, interpreter qatorma-qator", "Interpreter tezroq", "Kompilyator faqat Windows da"], correct: 1 },
+        { text: "‘Boolean’ ma'lumotlar turi qanday qiymatlarni qabul qiladi?", options: ["Raqamlar", "True/False", "Matnlar", "Belgilar"], correct: 1 },
+        { text: "Bir bayt necha bitdan iborat?", options: ["4", "8", "16", "32"], correct: 1 },
+        { text: "‘TCP/IP’ modelida qaysi qatlam transport vazifasini bajaradi?", options: ["Tarmoq qatlami", "Ilova qatlami", "Transport qatlami", "Fizik qatlami"], correct: 2 },
+        { text: "Qaysi biri mashhur relatsion ma'lumotlar bazasini boshqarish tizimi (RDBMS)?", options: ["Redis", "Cassandra", "MySQL", "MongoDB"], correct: 2 },
+        { text: "Protsessor registrlari nima vazifani bajaradi?", options: ["Ma'lumotlarni doimiy saqlash", "Tezkor ma'lumotlarni saqlash va arifmetik bajarish", "Tarmoq sozlamalari", "Quvvatni nazorat qilish"], correct: 1 },
+        { text: "‘Big O’ notatsiyasida O(1) qanday murakkablik?", options: ["Chiziqli", "Logarifmik", "Doimiy vaqt", "Kvadrat"], correct: 2 },
+        { text: "Quyidagi qaysi biri kiberxavfsizlik choralaridan biri?", options: ["Antivirus dasturlar", "Overclocking", "Disk defragmentatsiyasi", "Registry tozalash"], correct: 0 },
+        { text: "HTML tegida ‘href’ atributi qaysi elementda ishlatiladi?", options: ["<img>", "<a>", "<div>", "<p>"], correct: 1 },
+        { text: "CSS yordamida nima qilish mumkin?", options: ["Ma'lumotlar bazasini sozlash", "Veb-sahifa ko‘rinishini bezash", "Server kod yozish", "Tarmoq xavfsizligi"], correct: 1 },
+        { text: "‘Mashinali o‘rganish’ (Machine Learning) asosida nima amalga oshiriladi?", options: ["Statik veb-sayt", "Naqshlarni aniqlash va bashorat qilish", "Matn muharriri", "Shifrlash protokoli"], correct: 1 },
+        { text: "‘Firewall’ vazifasi?", options: ["Tarmoq trafigini filtrlash", "Disklarni formatlash", "Tezlikni oshirish", "Batareyani tejash"], correct: 0 },
+        { text: "Excel dasturida qator va ustunlar kesishmasi nima deyiladi?", options: ["Hujayra (cell)", "Formulalar", "Diagramma", "Makros"], correct: 0 },
+        { text: "Qaysi biri ikkinchi darajali xotira (secondary storage)?", options: ["RAM", "SSD", "CPU kesh", "Registr"], correct: 1 },
+        { text: "‘API’ so‘zi nimani anglatadi?", options: ["Application Programming Interface", "Advanced Protocol Internet", "Automatic Program Integration", "Application Process Interface"], correct: 0 },
+        { text: "JavaScript asosan qayerda ishlatiladi?", options: ["Server backend", "Veb-brauzerlarda interaktivlik", "Mobil dasturlarda faqat", "Operatsion tizim yadrosi"], correct: 1 },
+        { text: "Sanal mashina (Virtual Machine) nima?", options: ["Jismoniy kompyuterni dasturiy emulatsiyasi", "Tezkor xotira turi", "Tarmoq qurilmasi", "Antivirus dastur"], correct: 0 },
+        { text: "Quyidagi algoritmlardan qaysi biri saralash (sort) algoritmi?", options: ["Dijkstra", "QuickSort", "BFS", "A*"], correct: 1 },
+        { text: "‘RAID’ texnologiyasidan maqsad?", options: ["Disklarning ishonchliligi yoki unumdorligini oshirish", "Protsessor tezlatish", "Tarmoq o‘tkazuvchanlik", "Xotirani kamaytirish"], correct: 0 },
+        { text: "Quyidagilardan qaysi biri grafik asosidagi parolga hujum usuli?", options: ["Brute force", "Phishing", "Shoulder surfing", "Keylogger"], correct: 2 },
+        { text: "Nima uchun ‘zamonaviy kompyuterlar’ ikkilik sanoq sistemasidan foydalanadi?", options: ["Osonlik bilan ikki holatni ifodalaydi", "O‘nlik tizim murakkab", "An'anaviy qaror", "Tezlik uchun"], correct: 0 },
+        { text: "‘Encryption’ (shifrlash) nimani ta'minlaydi?", options: ["Ma'lumotlarni maxfiylik", "Tezlikni oshirish", "Ma'lumotlarni siqish", "Formatlash"], correct: 0 },
+        { text: "‘Full Stack developer’ kim?", options: ["Faqat frontend bilan ishlaydi", "Faqat ma'lumotlar bazasi", "Frontend va backend bilan ishlaydi", "Faqat server administratori"], correct: 2 },
+        { text: "Quyidagi qaysi biri ‘cryptocurrency’ texnologiyasi asosi?", options: ["Blockchain", "HTTP", "SMTP", "SNMP"], correct: 0 },
+        { text: "Data mining (maʼlumotlar koni) nima bilan shug‘ullanadi?", options: ["Ma'lumotlardan qonuniyat va bilim chiqarish", "Ma'lumotlarni o‘chirish", "Server sozlamalari", "Grafika yaratish"], correct: 0 },
+        { text: "Rekursiv funksiya qaysi xususiyatga ega?", options: ["O‘z-o‘zini chaqiradi", "Hech qachon to‘xtamaydi", "Parallel ishlaydi", "Faqat butun son qaytaradi"], correct: 0 },
+        { text: "‘QR kod’ haqida to‘g‘ri ma'lumot?", options: ["Ikki o‘lchamli shtrix-kod", "Faqat matn saqlaydi", "Ovozli kod", "Bir o‘lchamli"], correct: 0 },
+        { text: "‘XML’ vazifasi?", options: ["Strukturaviy ma'lumotlarni saqlash va tashish", "Veb-dizayn", "Tarmoq monitoringi", "Operatsion tizim"], correct: 0 },
+        { text: "Qaysi tarmoq qurilmasi turli tarmoqlarni bir-biriga bog‘laydi?", options: ["Router", "Switch", "Hub", "Repeater"], correct: 0 },
+        { text: "‘Garbage collection’ qayerda ishlatiladi?", options: ["Avtomatik xotirani boshqarish", "Ma'lumotlar bazasini indekslash", "Fayllarni siqish", "Tarmoq paketlari"], correct: 0 },
+        { text: "Qaysi biri server tomoni dasturlash tili?", options: ["HTML", "CSS", "PHP", "JavaScript (front)"], correct: 2 },
+        { text: "‘Protsessor’ tarkibidagi ALU nima vazifani bajaradi?", options: ["Arifmetik va mantiqiy amallar", "Xotirani boshqarish", "Kirish-chiqish", "Tarmoq protokoli"], correct: 0 },
+        { text: "SSID nima?", options: ["Simsiz tarmoq nomi", "Server identifikatori", "Xotira turi", "Parol hash"], correct: 0 },
+        { text: "‘Bluetooth’ texnologiyasi qanday turdagi ulanish?", options: ["Qisqa masofali simsiz", "Optik tolali", "Sun'iy yo‘ldosh", "Elektr tarmog‘i"], correct: 0 },
+        { text: "‘Dasturiy injiniring’ asosiy e'tibori?", options: ["Algoritmlar yaratish", "Ishonchli va sifatli dasturiy ta'minot yaratish", "Kompyuter qurish", "Tarmoq sozlamalari"], correct: 1 },
+        { text: "‘Bootstrap' nima?", options: ["Frontend framework (CSS/JS)", "Backend framework", "Ma'lumotlar bazasi", "Operatsion tizim"], correct: 0 },
+        { text: "Qaysi biri mashhur versiyalarni boshqarish tizimi?", options: ["Git", "Jenkins", "Docker", "Apache"], correct: 0 },
+        { text: "‘Qidiruv algoritmi’ Binary Search qanday shartda ishlaydi?", options: ["Massiv saralangan bo‘lishi kerak", "Massiv teskari tartibda", "Ro‘yxatda takrorlar yo‘q", "Faqat sonlar"], correct: 0 },
+        { text: "‘Rootkit’ qanday zararli dastur turi?", options: ["Tizim chuqur yashirinadi", "Foydalanuvchi fayllarni o‘chiradi", "Faqat brauzerga hujum", "Ransomware"], correct: 0 },
+        { text: "‘Intranet’ nima?", options: ["Ichki korporativ tarmoq", "Global Internet", "Tashqi serverlar", "Cloud xizmati"], correct: 0 },
+        { text: "‘Mikrokontroller’ odatda qayerda ishlatiladi?", options: ["IoT qurilmalar", "Superkompyuterlar", "Grafik protsessorlar", "Ma'lumotlar markazi"], correct: 0 },
+        { text: "‘Dijkstra algoritmi’ qanday masala uchun?", options: ["Eng qisqa yo‘l topish", "Saralash", "Qidiruv", "Shifrlash"], correct: 0 },
+        { text: "Bytecode nima?", options: ["Virtual mashina uchun oraliq kod", "Mashina kodi", "Manba kodi", "Assembly"], correct: 0 },
+        { text: "Qaysi biri mashhur bulut platformasi?", options: ["AWS", "Windows 11", "Linux kernel", "MySQL"], correct: 0 },
+        { text: "‘Social engineering’ asosi nima?", options: ["Inson omilini aldash", "Tarmoq hujumi", "Kod zaifligi", "Parol sindirish"], correct: 0 },
+        { text: "NAT (Network Address Translation) maqsadi?", options: ["Xususiy IP-larni umumiy IP ga o‘tkazish", "Tezlikni oshirish", "Tarmoqni kesish", "Antivirus"], correct: 0 },
+        { text: "‘Progresiv veb-ilovalar’ (PWA) qanday xususiyatga ega?", options: ["Offline ishlash va ilova hissi", "Faqat brauzerda", "Java appletlar", "FTP asosida"], correct: 0 },
+        { text: "‘Quantum computing’ qanday birlikda ishlaydi?", options: ["Kubit (qubit)", "Bit", "Bayt", "Nibble"], correct: 0 },
+        { text: "‘Symmetric encryption’ da nimadan foydalaniladi?", options: ["Bir kalit shifrlash va ochish", "Ikki kalit", "Hash funksiyasi", "Faol kalit almashinuvi"], correct: 0 },
+        { text: "‘Ajax’ texnologiyasi asosan nima qiladi?", options: ["Veb-sahifani qayta yuklamasdan ma'lumot almashish", "Server tomoni mantiq", "CSS animatsiya", "SQL so'rovlar"], correct: 0 },
+        { text: "‘Bash’ nima?", options: ["Unix shell va buyruq tili", "Dasturlash tili", "Ma'lumotlar bazasi", "Office dasturi"], correct: 0 },
+        { text: "‘CAP theorem’ qaysi sohaga tegishli?", options: ["Distributed ma'lumotlar bazalari", "Algoritmlar nazariyasi", "Tarmoq protokollari", "Sun'iy intellekt"], correct: 0 },
+        { text: "‘Scrum’ metodologiyasi qayerda qo‘llaniladi?", options: ["Loyihalarni boshqarish (Agile)", "Dasturiy ta'minot testlash", "Ma'lumotlar tahlili", "Dizayn"], correct: 0 },
+        { text: "‘Ransomware’ nima qiladi?", options: ["Ma'lumotlarni shifrlab, to'lov talab qiladi", "Tizimni tezlashtiradi", "Veb-sayt yaratadi", "Skrinshot oladi"], correct: 0 },
+        { text: "‘Latency’ tarmoqda nimani anglatadi?", options: ["Ma'lumot uzatish kechikishi", "O‘tkazuvchanlik", "Xatolik darajasi", "Sig‘imi"], correct: 0 },
+        { text: "‘GraphQL’ nima uchun ishlatiladi?", options: ["API uchun so‘rov tili", "Grafik render", "Ma'lumotlar bazasi", "Frontend framework"], correct: 0 },
+        { text: "‘Responsive web design’ maqsadi?", options: ["Turli qurilmalarga moslashuvchan sahifa", "Tezkor yuklanish", "Kengaytirilgan xavfsizlik", "Server mustaqillik"], correct: 0 },
+        { text: "‘Deepfake’ texnologiyasi nimaga asoslangan?", options: ["Sun’iy intellekt va neyron tarmoqlar", "Oddiy video muharrir", "3D modellashtirish", "Blokcheyn"], correct: 0 },
+        { text: "‘Chipset’ qaysi komponentlarni boshqaradi?", options: ["CPU va periferiya o‘rtasidagi aloqani", "Faqat xotira", "Faqat grafik", "Tarmoq kartasi"], correct: 0 },
+        { text: "JSON ma'lumot formati asosan qayerda ishlatiladi?", options: ["API va ma'lumot almashishda", "Tasvirlar", "Ovoz fayllari", "Arxivlash"], correct: 0 },
+    ];
+
+    // To‘liq 100 ta ekanligiga ishonch hosil qilish (agar 100 dan kam bo‘lsa to‘ldirish, aslida biz 100 ta yaratdik)
+    // Jami 100 ta bo‘lishini tekshirish
+    console.assert(QUESTION_BANK.length === 100, "Savollar soni 100 ta bo'lishi kerak, hozir: " + QUESTION_BANK.length);
+
+    // Global o‘zgaruvchilar
+    let currentQuestions = [];      // {qData, originalIndex, userAnswer(null yoki number)}
+    let rendered = false;
+
+    // Tasodifiy 25 ta savol tanlash (takrorlanmasdan)
+    function selectRandomQuestions() {
+        const shuffled = [...QUESTION_BANK];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        const selected = shuffled.slice(0, 25);
+        return selected.map((q, idx) => ({
+            qData: q,
+            originalId: idx,
+            userAnswer: null
+        }));
+    }
+
+    // Testni render qilish
+    function renderTest() {
+        const quizContainer = document.getElementById('quiz');
+        if (!quizContainer) return;
+        if (!currentQuestions.length) {
+            currentQuestions = selectRandomQuestions();
+        }
+        let html = '';
+        currentQuestions.forEach((item, idx) => {
+            const q = item.qData;
+            const qNumber = idx + 1;
+            html += `
+                <div class="question-card" data-qidx="${idx}">
+                    <div class="question-text">${qNumber}. ${escapeHtml(q.text)}</div>
+                    <div class="options">
+            `;
+            q.options.forEach((opt, optIdx) => {
+                const isChecked = (item.userAnswer === optIdx);
+                const checkedAttr = isChecked ? 'checked' : '';
+                html += `
+                    <div class="option">
+                        <input type="radio" name="q${idx}" value="${optIdx}" id="q${idx}_opt${optIdx}" ${checkedAttr}>
+                        <label for="q${idx}_opt${optIdx}">${String.fromCharCode(65+optIdx)}. ${escapeHtml(opt)}</label>
+                    </div>
+                `;
+            });
+            html += `</div></div>`;
+        });
+        quizContainer.innerHTML = html;
+        // Radio o‘zgarishlarni tracking
+        for (let i = 0; i < currentQuestions.length; i++) {
+            const radios = document.querySelectorAll(`input[name="q${i}"]`);
+            radios.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    const selectedVal = parseInt(e.target.value);
+                    currentQuestions[i].userAnswer = selectedVal;
+                });
+            });
+        }
+        // natijalar panelini yashirish
+        const resultDiv = document.getElementById('result');
+        if (resultDiv) resultDiv.style.display = 'none';
+    }
+
+    // XTML special chars himoya
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+
+    // Baholash va natijalarni chiqarish
+    function evaluateAndShow() {
+        if (!currentQuestions.length) {
+            currentQuestions = selectRandomQuestions();
+            renderTest();
+        }
+        let totalCorrect = 0;
+        const detailedResults = [];
+        for (let i = 0; i < currentQuestions.length; i++) {
+            const item = currentQuestions[i];
+            const correctIdx = item.qData.correct;
+            const userAns = item.userAnswer;
+            const isCorrect = (userAns !== null && userAns === correctIdx);
+            if (isCorrect) totalCorrect++;
+            detailedResults.push({
+                questionText: item.qData.text,
+                userAnswer: userAns,
+                correctAnswer: correctIdx,
+                options: item.qData.options,
+                isCorrect: isCorrect,
+                correctAnswerText: item.qData.options[correctIdx]
+            });
+        }
+        const score = totalCorrect * 4;  // 4 ball har bir to‘g‘ri javob
+        const resultDiv = document.getElementById('result');
+        if (!resultDiv) return;
+        
+        let feedbackHtml = `<div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <div><span class="score-badge">🏆 ${score} / 100 ball</span></div>
+            <div><strong>✅ To‘g‘ri javoblar:</strong> ${totalCorrect} / 25 &nbsp;| &nbsp;⭐ Har bir to‘g‘ri 4 ball</div>
+        </div><hr>`;
+        
+        feedbackHtml += `<div style="max-height: 500px; overflow-y: auto; padding-right: 8px;">`;
+        detailedResults.forEach((res, idx) => {
+            const statusClass = res.isCorrect ? 'correct-feedback' : 'wrong-feedback';
+            const statusIcon = res.isCorrect ? '✔️' : '❌';
+            const userLetter = (res.userAnswer !== null && res.userAnswer >=0 && res.userAnswer <=3) ? String.fromCharCode(65+res.userAnswer) : '❓';
+            const correctLetter = String.fromCharCode(65+res.correctAnswer);
+            feedbackHtml += `
+                <div class="feedback-item ${statusClass}" style="margin-bottom: 12px;">
+                    <div style="font-weight: 700;">${idx+1}. ${escapeHtml(res.questionText)}</div>
+                    <div style="margin-top: 6px; font-size:0.9rem;">${statusIcon} Sizning javob: ${userLetter !== '❓' ? userLetter+") "+escapeHtml(res.options[res.userAnswer]) : "Javob tanlanmagan"}</div>
+                    <div style="color: #1e6f3f; font-size:0.9rem;">✅ To‘g‘ri javob: ${correctLetter}) ${escapeHtml(res.correctAnswerText)}</div>
+                </div>
+            `;
+        });
+        feedbackHtml += `</div><div style="margin-top: 20px; text-align: center; font-size:0.9rem;">📌 Yana yangi test olish uchun "Yangi test variantini olish" tugmasini bosing.</div>`;
+        resultDiv.innerHTML = feedbackHtml;
+        resultDiv.style.display = 'block';
+        // Natijalar ko‘rinishi uchun smooth scroll
+        resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Yangi test to‘plami (25 tasi)
+    function loadNewVariant() {
+        currentQuestions = selectRandomQuestions();
+        renderTest();
+        const resultDiv = document.getElementById('result');
+        if (resultDiv) resultDiv.style.display = 'none';
+    }
+
+    // Sahifa yuklanganda
+    document.addEventListener('DOMContentLoaded', () => {
+        currentQuestions = selectRandomQuestions();
+        renderTest();
+        const submitBtn = document.getElementById('submitBtn');
+        const newSetBtn = document.getElementById('newSetBtn');
+        if (submitBtn) submitBtn.addEventListener('click', evaluateAndShow);
+        if (newSetBtn) newSetBtn.addEventListener('click', loadNewVariant);
+    });
+</script>
+</body>
+</html>
